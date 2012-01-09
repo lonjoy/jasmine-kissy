@@ -2,8 +2,9 @@
  * @fileoverview 用于jasmine测试前向页面插入测试用的html片段（应用于jsTestDriver）
  * @author 剑平（明河）<minghe36@126.com>
  **/
-(function(S){
+(function (S) {
     var $ = S.Node.all;
+
     /**
      * @name JamineFixture
      * @class 用于jasmine测试前向页面插入测试用的html片段（应用于jsTestDriver）
@@ -11,7 +12,7 @@
      */
     function JamineFixture(config) {
         var self = this;
-        S.mix(self,JamineFixture.defaultConfig,config);
+        S.mix(self, JamineFixture.defaultConfig, config);
         self._init();
     }
 
@@ -19,7 +20,7 @@
         /**
          * 容器钩子
          */
-        wrapperHook : '#J_JF',
+        wrapperHook:'#J_JF',
         /**
          * html片段插入dom的容器id
          */
@@ -45,7 +46,7 @@
          * @return {NodeList}
          */
         load:function () {
-            var self = this,html;
+            var self = this, html;
             if (!arguments) return false;
             html = self.read.apply(self, arguments);
             return self._appendTo(html);
@@ -54,8 +55,8 @@
          * 只读取html文件，返回html片段数据
          * @return {String}
          */
-        read : function(){
-            var self = this, urls = arguments,aHtml = [];
+        read:function () {
+            var self = this, urls = arguments, aHtml = [];
             if (!urls.length) return false;
             S.each(urls, function (url) {
                 aHtml.push(self._getHtml(url));
@@ -66,8 +67,8 @@
          * 清除测试容器内的节点
          * @return {NodeList}
          */
-        clean : function(){
-            var self = this,wrapperHook = self.wrapperHook;
+        clean:function () {
+            var self = this, wrapperHook = self.wrapperHook;
             return $(wrapperHook).html('');
         },
         /**
@@ -101,15 +102,15 @@
          * 向页面添加html片段dom
          * @param {Stirng} html html片段
          */
-        _appendTo : function(html){
-            if(!S.isString(html)) return false;
-            var self = this,wrapperTpl = self.wrapperTpl,
+        _appendTo:function (html) {
+            if (!S.isString(html)) return false;
+            var self = this, wrapperTpl = self.wrapperTpl,
                 wrapperHook = self.wrapperHook,
                 wrapperHtml;
-            if($(wrapperHook).length){
+            if ($(wrapperHook).length) {
                 $(wrapperHook).html(html);
-            }else{
-                wrapperHtml = S.substitute(wrapperTpl,{'fixture' : html});
+            } else {
+                wrapperHtml = S.substitute(wrapperTpl, {'fixture':html});
                 $('body').append(wrapperHtml);
             }
             return $(wrapperHook);
@@ -117,12 +118,44 @@
         /**
          * 清理缓存
          */
-        clearCache:function () {
+        cleanCache:function () {
             this.cache = {};
             return this;
         }
     });
-
+    //实例化 JamineFixture
     JF = new JamineFixture();
-
 })(KISSY);
+beforeEach(function () {
+    S = KISSY,$ = S.Node.all;
+    //添加新的matcher
+    this.addMatchers({
+        toExist : function(){
+            return this.actual.length > 0;
+        },
+        toHasClass:function (className) {
+            return this.actual.hasClass(className);
+        },
+        toHasAttr:function (attr) {
+            return this.actual.hasAttr(attr);
+        },
+        toHasProp:function (prop) {
+            return this.actual.hasProp(prop);
+        },
+        toHasData:function (dataName) {
+            return this.actual.data(dataName) != '';
+        },
+        toContain : function(selector){
+            return this.actual.children(selector).length > 0;
+        },
+        toEqualValue : function(value){
+            return this.actual.val() === value;
+        },
+        toEqualText : function(text){
+            return S.trim(this.actual.text()) === text;
+        }
+    });
+});
+afterEach(function () {
+    JF.clean();
+});

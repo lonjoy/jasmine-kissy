@@ -1,6 +1,6 @@
 # jasmine-kissy
 
-版本：0.1
+版本：`0.1`
 
 jasmine-kissy向[Jasmine](http://pivotal.github.com/jasmine/)增加二个功能
 
@@ -9,6 +9,7 @@ jasmine-kissy向[Jasmine](http://pivotal.github.com/jasmine/)增加二个功能
   
 ## 全局变量
 为了方便测试用例页面直接使用，定义了几个全局变量
+
 - `JF`JamineFixture的实例，使用JF的`load()`读取html片段
 - `S` KISSY的缩写变量
 - `$` KISSY.Node.all的缩写变量

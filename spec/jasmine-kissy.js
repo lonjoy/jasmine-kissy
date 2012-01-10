@@ -28,8 +28,8 @@ describe('test jasmine-kissy', function () {
         expect($('#test')).toEqualText('my name is minghe.');
         expect($('#test-input')).toEqualValue('kissy');
         expect($('#test-input')).toHasAttr('type');
-        expect($('#test-input')).toHasAttr('type');
         $('#test-input').data('author','minghe');
+        expect($('#test-input')).toHasData('author');
         expect($('#test-checkbox')).toHasProp('checked');
     })
 

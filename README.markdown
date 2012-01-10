@@ -60,6 +60,12 @@ jasmine-kissy向[Jasmine](http://pivotal.github.com/jasmine/)增加二个功能
 - `toEqualValue()` 测试节点的的value值
 - `toEqualText()` 测试节点的text
 
+示例代码：
+
+  `expect($('#test')).toHasClass('test-wrapper');`
+
+  `expect($('#test')).toEqualText('my name is minghe.');`
+
 
 ## 依赖
 

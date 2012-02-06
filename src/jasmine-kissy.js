@@ -13,7 +13,6 @@
     function JamineFixture(config) {
         var self = this;
         S.mix(self, JamineFixture.defaultConfig, config);
-        self._init();
     }
 
     JamineFixture.defaultConfig = {
@@ -32,15 +31,9 @@
         /**
          * html片段存放的目录路径
          */
-        path:'http://localhost:9876/test/test/fixtures/'
+        path:'http://localhost:9876/test/spec/fixtures/'
     };
     S.augment(JamineFixture, {
-        /**
-         * 初始化
-         */
-        _init:function () {
-
-        },
         /**
          * ajax读取html文件，并插入到测试容器（可以是多个url）
          * @return {NodeList}
@@ -100,7 +93,7 @@
         },
         /**
          * 向页面添加html片段dom
-         * @param {Stirng} html html片段
+         * @param {string} html html片段
          */
         _appendTo:function (html) {
             if (!S.isString(html)) return false;
@@ -123,11 +116,13 @@
             return this;
         }
     });
-    //实例化 JamineFixture
-    JF = new JamineFixture();
+    KISSY.JamineFixture = JamineFixture;
 })(KISSY);
+JF = {};
 beforeEach(function () {
     S = KISSY,$ = S.Node.all;
+    //实例化 JamineFixture
+    JF = new S.JamineFixture();
     //添加新的matcher
     this.addMatchers({
         toExist : function(){

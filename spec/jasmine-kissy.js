@@ -1,7 +1,7 @@
 describe('test jasmine-kissy', function () {
     var url1 = 'jasmine-kissy_fixture.html',
         url2 = 'jasmine-kissy-2_fixture.html';
-    JF.path = 'spec/fixtures';
+    JF.path = 'http://localhost:9876/test/spec/fixtures/';
     it('成功读取html片段文件', function () {
         JF.load(url1);
         expect($('#test')).toExist();

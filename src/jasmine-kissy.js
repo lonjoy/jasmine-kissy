@@ -119,8 +119,9 @@
     KISSY.JamineFixture = JamineFixture;
 })(KISSY);
 JF = {};
+S = KISSY;
+$ = S.Node.all;
 beforeEach(function () {
-    S = KISSY,$ = S.Node.all;
     //实例化 JamineFixture
     JF = new S.JamineFixture();
     //添加新的matcher

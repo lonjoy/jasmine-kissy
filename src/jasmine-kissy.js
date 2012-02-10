@@ -149,6 +149,9 @@ beforeEach(function () {
         },
         toEqualText : function(text){
             return S.trim(this.actual.text()) === text;
+        },
+        toShow : function(){
+            return this.actual.css('display') === 'block';
         }
     });
 });

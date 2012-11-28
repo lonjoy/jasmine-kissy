@@ -124,10 +124,23 @@ KISSY.add(function (S, Node, io, simpleData) {
             expect(onSuccess).toHaveBeenCalledWith(jasmine.any(Object));
             expect(successResult.status).toEqual(1);
             expect(successResult.name).toEqual('minghe');
-
-
         })
+
+        it('io.jsonp() mock with data',function(){
+            io.use(api,200);
+
+            onSuccess = jasmine.createSpy('onSuccess');
+            //异步请求带上不存在的参数
+            S.io.jsonp(api,{site:'36ria'},function(data){
+                onSuccess(data);
+            });
+            var successResult = onSuccess.mostRecentCall.args[0];
+            expect(onSuccess).toHaveBeenCalledWith(jasmine.any(Object));
+            expect(successResult.status).toEqual(2);
+            expect(successResult.site).toEqual('36ria');
+        })
+
     });
 }, {requires:['node', 'ajax',
-    'specs/datas/simple'
+    'specs/datas/demo'
 ]});

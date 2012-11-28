@@ -12,6 +12,15 @@ KISSY.add(function (S) {
             status:200,
             data:{site:'36ria'},
             responseText: '{"status":2,"site":"36ria"}'
+        },
+        {
+            status:200,
+            responseText: 'jsonp1234({"status":1,"name":"minghe"})'
+        },
+        {
+            status:200,
+            data:{site:'36ria'},
+            responseText: 'jsonp5454({"status":2,"site":"36ria"})'
         }
     ]
 });

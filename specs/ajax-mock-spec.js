@@ -65,6 +65,7 @@ KISSY.add(function (S, Node, io, simpleData) {
         });
 
         it('use success data mock with data,but dont have data',function(){
+            //参数不存在时，使用没有参数的成功状态伪数据
             io.use(api,200);
 
             onSuccess = jasmine.createSpy('onSuccess');
@@ -81,6 +82,50 @@ KISSY.add(function (S, Node, io, simpleData) {
             expect(onSuccess).toHaveBeenCalledWith(jasmine.any(Object));
             expect(successResult.status).toEqual(1);
             expect(successResult.name).toEqual('minghe');
+        })
+
+        it('io.get() mock',function(){
+            io.use(api,200);
+
+            onSuccess = jasmine.createSpy('onSuccess');
+            //异步请求带上不存在的参数
+            S.io.get(api,function(data){
+                onSuccess(data);
+            });
+            var successResult = onSuccess.mostRecentCall.args[0];
+            expect(onSuccess).toHaveBeenCalledWith(jasmine.any(Object));
+            expect(successResult.status).toEqual(1);
+            expect(successResult.name).toEqual('minghe');
+        })
+
+        it('io.post() mock',function(){
+            io.use(api,200);
+
+            onSuccess = jasmine.createSpy('onSuccess');
+            //异步请求带上不存在的参数
+            S.io.post(api,function(data){
+                onSuccess(data);
+            });
+            var successResult = onSuccess.mostRecentCall.args[0];
+            expect(onSuccess).toHaveBeenCalledWith(jasmine.any(Object));
+            expect(successResult.status).toEqual(1);
+            expect(successResult.name).toEqual('minghe');
+        })
+
+        it('io.jsonp() mock',function(){
+            io.use(api,200);
+
+            onSuccess = jasmine.createSpy('onSuccess');
+            //异步请求带上不存在的参数
+            S.io.jsonp(api,function(data){
+                onSuccess(data);
+            });
+            var successResult = onSuccess.mostRecentCall.args[0];
+            expect(onSuccess).toHaveBeenCalledWith(jasmine.any(Object));
+            expect(successResult.status).toEqual(1);
+            expect(successResult.name).toEqual('minghe');
+
+
         })
     });
 }, {requires:['node', 'ajax',

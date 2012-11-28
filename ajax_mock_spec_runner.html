@@ -6,7 +6,7 @@
   <link rel="stylesheet" type="text/css" href="lib/jasmine/jasmine.css" />
   <script type="text/javascript" src="lib/jasmine/jasmine.js"></script>
   <script type="text/javascript" src="lib/jasmine/jasmine-html.js"></script>
-  <script type="text/javascript" src="http://a.tbcdn.cn/s/kissy/1.2.0/??seed-min.js,dom-min.js,event-min.js"></script>
+  <script type="text/javascript" src="http://a.tbcdn.cn/s/kissy/1.2.0/??seed.js,dom.js,event.js"></script>
   <script type="text/javascript" src="lib/ajax-mock.js"></script>
 </head>
 <body>
@@ -27,7 +27,6 @@
                }
            ]
        });
-       JF.path = './fixtures';
        S.use('specs/runner',function(S,runner){
            runner();
        })

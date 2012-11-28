@@ -10,5 +10,5 @@ KISSY.add(function (S, Base, Node) {
     }
     return runner;
 },{requires:['base', 'node',
-    'specs/proofList-spec'
+    'specs/ajax-mock-spec'
 ]});

@@ -1,6 +1,6 @@
 # jasmine-kissy
 
-版本：`0.1`
+版本：`1.0`
 
 jasmine-kissy是为了方便基于kissy的代码进行单元测试，而向[Jasmine](http://pivotal.github.com/jasmine/)添加的扩展。
 
@@ -21,6 +21,8 @@ jasmine-kissy中的ajax mock远比[jasmine ajax](https://github.com/pivotal/jasm
 - 支持kissy的所有io方法，比如get()、post()、jsonp等
 
 目前不支持mock io.upload()。
+
+demo传送门：[mock api test](http://demo.36ria.com/jasmine-kissy/ajax_mock_spec_runner.html)
 
 
 ####引入依赖文件

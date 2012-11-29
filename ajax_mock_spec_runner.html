@@ -11,26 +11,11 @@
 </head>
 <body>
 
-   <script type="text/javascript">
-       var S = KISSY;
-       S.Config.debug = '@DEBUG@';
-       S.config({
-           packages:[
-               {
-                   name:"gallery",
-                   path:"http://a.tbcdn.cn/s/kissy/",
-                   charset:"utf-8"
-               },
-               {
-                   name:'specs',
-                   path:'./',
-                   charset:"gbk"
-               }
-           ]
-       });
-       S.use('specs/runner',function(S,runner){
-           runner();
-       })
-   </script>
+<script type="text/javascript" src="src/runner.js"></script>
+<script type="text/javascript">
+    KISSY.use('jasmine/runner',function(S,runner){
+        runner('specs/ajax-mock-spec');
+    })
+</script>
 </body>
 </html>

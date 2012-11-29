@@ -34,6 +34,13 @@ demo传送门：[mock api test](http://demo.36ria.com/jasmine-kissy/ajax_mock_sp
   <script type="text/javascript" src="src/jasmine-kissy.js"></script>
 ```
 
+留意必须开启KISSY的debug标识：
+
+```javascript
+       var S = KISSY;
+       S.Config.debug = '@DEBUG@';
+```
+
 ####ajax的伪数据
 
 ```javascript

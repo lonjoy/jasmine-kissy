@@ -12,7 +12,18 @@ jasmine-kissy主要扩展了如下三个功能
 
 ##ajax mock
 
-####ajax mock 使用说明
+jasmine-kissy中的ajax mock远比[jasmine ajax](https://github.com/pivotal/jasmine-ajax)来的强大。
+
+- 你无需修改任何源码js
+- 能够直接截获接口，当脚本向接口发送请求时，直接劫持到伪结果集
+- 简单，根据status自动返回对应的结果集，你只需要书写一份伪数据
+- 完美支持jsonp，无需任何标识
+- 支持kissy的所有io方法，比如get()、post()、jsonp等
+
+目前不支持mock io.upload()。
+
+
+####引入依赖文件
 
 想要mock kissy的ajax，需要覆盖"ajax/base"模块，所以不能引入kissy.js文件，只能引用seed-min.js，然后引入jasmine-kissy.js文件，比如下面的代码：
 
@@ -21,6 +32,144 @@ jasmine-kissy主要扩展了如下三个功能
   <script type="text/javascript" src="src/jasmine-kissy.js"></script>
 ```
 
+####ajax的伪数据
+
+```javascript
+KISSY.add(function (S) {
+    return [
+        {
+            status:200,
+            responseText: '{"status":1,"name":"minghe"}'
+        },
+        {
+            status:500,
+            responseText:''
+        },
+        {
+            status:200,
+            data:{site:'36ria'},
+            responseText: '{"status":2,"site":"36ria"}'
+        },
+        {
+            status:200,
+            responseText: 'jsonp1234({"status":1,"name":"minghe"})'
+        },
+        {
+            status:200,
+            data:{site:'36ria'},
+            responseText: 'jsonp5454({"status":2,"site":"36ria"})'
+        }
+    ]
+});
+```
+
+一份伪数据为一个数组，包含各种状态下的结果集，比如成功，失败，传入不同参数时。
+
+- status：值为200时，为成功状态，会触发io的**sucess**事件
+- data：为前端传递给服务器端的参数，对应io的**data**参数，当不存在匹配时，mock类会返回不带参数的结果集
+- responseText：文本结果集，留意jsonp时的文本，mock类会自动判断jsonp
+
+####mock 的使用
+
+```javascript
+        var api = "http://service.taobao.com/support/minerva/ajax/refundPlugAjax.htm";
+        //使用mock
+        io.useMock = true;
+        //装入伪数据
+        io.install(api, simpleData);
+        //使用成功状态的假数据
+        io.use(api, 200);
+```
+
+**io.useMock=true** 开启ajax mock
+
+**io.install(api, simpleData)** 装入伪数据，simpleData即上面的demo数据
+
+**io.use(api, 200)** 使用成功状态的伪数据
+
+ 接下来可以使用io方法试试
+
+```javascript
+            // 用于ajax的回调测试
+            onSuccess = jasmine.createSpy('onSuccess');
+            //触发异步请求
+            S.io({
+                url:api,
+                type:"GET",
+                success:function (data, status) {
+                    onSuccess(data);
+                }
+            });
+
+            var successResult = onSuccess.mostRecentCall.args[0];
+            expect(onSuccess).toHaveBeenCalledWith(jasmine.any(Object));
+            expect(successResult.status).toEqual(1);
+            expect(successResult.name).toEqual('minghe');
+```
+onSuccess方法将会被执行一次，并且它的第一个参数的值为：
+
+```javascript
+{"status":1,"name":"minghe"}
+```
+
+如果你想要mock 接口失败时的情况
+
+```javascript
+        it('use error data mock',function(){
+            //使用失败状态的假数据
+            io.use(api,500);
+
+            onError = jasmine.createSpy('onError');
+
+            //触发异步请求
+            S.io({
+                url:api,
+                type:"GET",
+                error:function(data){
+                    onError(data);
+                }
+            });
+
+            expect(onError).toHaveBeenCalled();
+        });
+```
+mock jsonp的接口情况也是如此
+
+```javascript
+            io.use(api,200);
+
+            onSuccess = jasmine.createSpy('onSuccess');
+            //异步请求带上不存在的参数
+            S.io.jsonp(api,function(data){
+                onSuccess(data);
+            });
+            var successResult = onSuccess.mostRecentCall.args[0];
+            expect(onSuccess).toHaveBeenCalledWith(jasmine.any(Object));
+            expect(successResult.status).toEqual(1);
+            expect(successResult.name).toEqual('minghe');
+```
+如果你想要mock，不同传参下的接口
+
+ ```javascript
+            io.use(api,200);
+
+            onSuccess = jasmine.createSpy('onSuccess');
+            //异步请求带上指定参数
+            S.io({
+                url:api,
+                type:"GET",
+                data:{site:'36ria'},
+                success:function (data, status) {
+                    onSuccess(data);
+                }
+            });
+            var successResult = onSuccess.mostRecentCall.args[0];
+            expect(onSuccess).toHaveBeenCalledWith(jasmine.any(Object));
+            expect(successResult.status).toEqual(2);
+            expect(successResult.site).toEqual('36ria');
+ ```
+
+ 所有的mock都非常简单，你无需修改源码js，mock类会自动处理，你唯一要做的就是install伪数据，然后use你想要的结果集
 
 ## 全局变量
 为了方便测试用例页面直接使用，定义了几个全局变量

@@ -2,17 +2,34 @@
 
 版本：`0.1`
 
-jasmine-kissy向[Jasmine](http://pivotal.github.com/jasmine/)增加二个功能
+jasmine-kissy是为了方便基于kissy的代码进行单元测试，而向[Jasmine](http://pivotal.github.com/jasmine/)添加的扩展。
 
-- 1.快速加载html片段。jsTestDriver使用[jasmine-jstd-adapter](https://github.com/ibolmo/jasmine-jstd-adapter)(jasmine对jsTestDriver的适配器)，由于有自己的测试运行页面，无法向运行页面插入测试用html片段，所以在你的spec脚本中需要插入html片段。
-- 2.增加用于KISSY的machers，只作用于KISSY的Node模块。
-  
+jasmine-kissy主要扩展了如下三个功能
+
+- 1.增加kissy的ajax mock功能（伪造ajax的假数据方便进行ajax测试）
+- 2.快速加载html片段。jsTestDriver使用[jasmine-jstd-adapter](https://github.com/ibolmo/jasmine-jstd-adapter)(jasmine对jsTestDriver的适配器)，由于有自己的测试运行页面，无法向运行页面插入测试用html片段，所以在你的spec脚本中需要插入html片段。
+- 3.增加用于KISSY的machers，只作用于KISSY的Node模块。
+
+##ajax mock
+
+####ajax mock 使用说明
+
+想要mock kissy的ajax，需要覆盖"ajax/base"模块，所以不能引入kissy.js文件，只能引用seed-min.js，然后引入jasmine-kissy.js文件，比如下面的代码：
+
+```html
+  <script type="text/javascript" src="http://a.tbcdn.cn/s/kissy/1.2.0/??seed-min.js,dom-min.js,event-min.js,node-min.js"></script>
+  <script type="text/javascript" src="src/jasmine-kissy.js"></script>
+```
+
+
 ## 全局变量
 为了方便测试用例页面直接使用，定义了几个全局变量
 
 - `JF`JamineFixture的实例，使用JF的`load()`读取html片段
 - `S` KISSY的缩写变量
 - `$` KISSY.Node.all的缩写变量
+
+
 
 ## 加载html片段
 必须先配置html片段所放的目录路径，`JF.path = 'spec/fixtures'`

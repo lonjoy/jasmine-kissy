@@ -1,7 +1,3 @@
-/**
- * a scalable client io framework
- * @author  yiminghe@gmail.com , lijing00333@163.com
- */
 KISSY.add("ajax/base", function (S, JSON, Event, XhrObject) {
 
         var rlocalProtocol = /^(?:about|app|app\-storage|.+\-extension|file|widget):$/,
@@ -126,6 +122,7 @@ KISSY.add("ajax/base", function (S, JSON, Event, XhrObject) {
             if (!c.url) {
                 return undefined;
             }
+
             c = setUpConfig(c);
             var xhr = new XhrObject(c);
             fire("start", xhr);
@@ -168,12 +165,7 @@ KISSY.add("ajax/base", function (S, JSON, Event, XhrObject) {
             var useMock = io.useMock;
 
             if(useMock){
-                var url = c.url;
-
-                xhr.status = io.mock.status;
-                xhr.responseText = io.mock.responseText || "";
-                xhr.readyState = io.mock.readyState;
-                xhr.mimeType = io.mock.contentType;
+                mock(c,xhr);
             }else{
                 try {
                     // flag as sending
@@ -209,11 +201,41 @@ KISSY.add("ajax/base", function (S, JSON, Event, XhrObject) {
                 return defaultConfig;
             }
         });
+        /**
+         *  mock方法
+         * @param c
+         * @param xhr
+         */
+        function mock(c,xhr){
+            var mockData = io.currentResponse;
+            if(!c.data) c.data = "";
+            var type = c.dataType;
+            var isJsonp = S.isArray(type) && type[0]  == 'script' && type[1] == 'json';
+            mockData = io._getResponseUseData(mockData, c.data,isJsonp);
+            xhr.status = mockData.status;
+            xhr.responseText = mockData.responseText || "";
+            xhr.mimeType = mockData.contentType;
+
+            if(isJsonp){
+                io._setJsonpCallback(xhr,mockData);
+            }
+            //触发ajax对象的回调
+            xhr.callback(mockData.status);
+
+            io.resetCurrentResponse();
+        }
 
         /**
+         * mock 方法
          * @author 明河
          */
         S.mix(io, {
+            /**
+             * 当前使用的伪数据
+             * @type Object | Array
+             * @default []
+             */
+            currentResponse:[],
             /**
              * 是否mock ajax数据
              * @type Boolean
@@ -221,28 +243,151 @@ KISSY.add("ajax/base", function (S, JSON, Event, XhrObject) {
              */
             useMock:false,
             /**
+             * 重置currentResponse
+             * @return Array
+             */
+            resetCurrentResponse:function(){
+                return io.currentResponse = [];
+            },
+            /**
              * 添加mock的伪数据
              * @param {String} url 需要mock的接口
              * @param {Object} response 数据类似{status:200,responseText:''}
              */
-            response:function(url,response){
+            install:function(url,response){
                 if(!S.isString(url)){
                     S.log('response的url不存在！');
                     return false;
                 }
-                if(S.isObject(response)){
+                if(S.isArray(response)){
                     var responses = io.responses;
-                    response = {
-                        //mock 状态码，200为成功
-                        status:response.status,
-                        //mock接口返回数据数据
-                        responseText:response.responseText || "",
+                    S.each(response,function(res,i){
                         //mock接口返回的数据头信息
-                        contentType:response.responseHeaders || defaultConfig.accepts.json
-                    };
+                        response[i].contentType = res.responseHeaders || defaultConfig.accepts.json;
+                    });
                     responses[url] = response;
                 }
                 return responses[url];
+            },
+            /**
+             * 使用指定状态码的数据
+             * @param  {String} url
+             * @param {Number|String} status
+             */
+            use:function(url,status){
+                if(!status || status == 'success') status = 200;
+
+                var response =  io.responses[url];
+                if(!response) return false;
+
+                return io.currentResponse = io._getResponse(response,status);
+            },
+            /**
+             * 从大的伪数据（包含成功失败）获取指定状态码的伪数据
+             * @param {Object}  response
+             * @param {Number} status
+             * @return {Array}
+             * @private
+             */
+            _getResponse:function(response,status){
+                if(!response) return false;
+
+                var res = [];
+                if(S.isNumber(status)){
+                    S.each(response,function(r){
+                        if(r.status == status){
+                            res.push(r);
+                        }
+                    });
+                }
+
+                return res;
+            },
+            /**
+             *  通过异步参数来过滤想要的假数据
+             * @param {Array} response
+             * @param {String} data
+             * @param {Boolean} isJsonp 是否是jsonp
+             * @private
+             */
+            _getResponseUseData:function(response,data,isJsonp){
+                var res = {};
+                var oData = S.unparam(data);
+                if(S.isEmptyObject(oData)){
+                    S.each(response,function(r){
+                        if(!r.data){
+                            if(isJsonp){
+                                if(io._isJsonpResponse(r)){
+                                    res = r;
+                                    return false;
+                                }
+                            }else{
+                                res = r;
+                                return false;
+                            }
+                        }
+                    })
+                }else{
+                    var hasData = false;
+                    S.each(response,function(r){
+                        var str = S.param(r.data);
+                        if(str == data){
+                            if(isJsonp){
+                                if(io._isJsonpResponse(r)){
+                                    res = r;
+                                    hasData = true;
+                                    return false;
+                                }
+                            }else{
+                                res = r;
+                                hasData = true;
+                                return false;
+                            }
+                        }
+                    });
+                    if(!hasData) return io._getResponseUseData(response,'');
+                }
+                return res;
+            },
+            /**
+             * 是否是jsonp的结果集
+             * @param {Object} response 结果集·
+             * @return {Boolean}
+             * @private
+             */
+            _isJsonpResponse:function(response){
+                var responseText = response.responseText;
+                return /\(/.test(responseText);
+            },
+            /**
+             * 获取jsonp回调函数名
+             * @param {Object} response
+             * @private
+             * @return {String}
+             */
+            _getJsonpCallbackName:function(response){
+                var responseText = response.responseText;
+                return responseText.split('(')[0];
+            },
+            /**
+             * mock jsonp的回调
+             * @param {Object} xhr xhr对象
+             * @param {Object} response 结果集
+             * @private
+             */
+            _setJsonpCallback:function(xhr,response){
+                var callbackName = io._getJsonpCallbackName(response);
+                //设置回调函数
+                window[callbackName] = function(r) {
+                    // jsonp 返回了数组
+                    if (arguments.length > 1) {
+                        r = S.makeArray(arguments);
+                    }
+                    xhr.responseData = r;
+                    xhr.fire('success');
+                };
+
+                xhr.jsonpCallback = callbackName;
             },
             /**
              * 结果集集合
@@ -251,13 +396,6 @@ KISSY.add("ajax/base", function (S, JSON, Event, XhrObject) {
              */
             responses:{}
         });
-
-        io.Response = function(){
-
-        };
-
-
-
         return io;
     },
     {

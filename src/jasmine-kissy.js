@@ -402,7 +402,7 @@ KISSY.add("ajax/base", function (S, JSON, Event, XhrObject) {
         requires:["json", "event", "ajax/xhrobject"]
     });
 
-KISSY.add('jasmine/fixture',function(S,Node){
+KISSY.add('jasmine/htmlMock',function(S,Node){
     var $ = Node.all;
 
     /**
@@ -431,7 +431,7 @@ KISSY.add('jasmine/fixture',function(S,Node){
         /**
          * html片段存放的目录路径
          */
-        path:'http://localhost:9876/test/spec/fixtures/'
+        path:'./'
     };
     S.augment(JamineFixture, {
         /**
@@ -520,15 +520,7 @@ KISSY.add('jasmine/fixture',function(S,Node){
 
     return JamineFixture;
 },{requires:['node']});
-
-KISSY.use('jasmine/fixture',function(){
-
-});
-JF = {};
-S = KISSY;
 beforeEach(function () {
-    //实例化 JamineFixture
-    JF = new S.JamineFixture();
     //添加新的matcher
     this.addMatchers({
         toExist:function () {
@@ -553,13 +545,10 @@ beforeEach(function () {
             return this.actual.val() === value;
         },
         toEqualText:function (text) {
-            return S.trim(this.actual.text()) === text;
+            return KISSY.trim(this.actual.text()) === text;
         },
         toShow:function () {
             return this.actual.css('display') === 'block';
         }
     });
-});
-afterEach(function () {
-    JF.clean();
 });

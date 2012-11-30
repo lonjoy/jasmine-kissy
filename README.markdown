@@ -7,7 +7,7 @@ jasmine-kissy是为了方便基于kissy的代码进行单元测试，而向[Jasm
 jasmine-kissy主要扩展了如下三个功能
 
 - 1.增加kissy的ajax mock功能（伪造ajax的假数据方便进行ajax测试）
-- 2.快速加载html片段。jsTestDriver使用[jasmine-jstd-adapter](https://github.com/ibolmo/jasmine-jstd-adapter)(jasmine对jsTestDriver的适配器)，由于有自己的测试运行页面，无法向运行页面插入测试用html片段，所以在你的spec脚本中需要插入html片段。
+- 2.增加kissy的html mock功能，同步加载html片段并插入到测试运行页中
 - 3.增加用于KISSY的machers，只作用于KISSY的Node模块。
 
 ##ajax mock
@@ -180,16 +180,10 @@ mock jsonp的接口情况也是如此
 
  所有的mock都非常简单，你无需修改源码js，mock类会自动处理，你唯一要做的就是install伪数据，然后use你想要的结果集
 
-## 全局变量
-为了方便测试用例页面直接使用，定义了几个全局变量
-
-- `JF`JamineFixture的实例，使用JF的`load()`读取html片段
-- `S` KISSY的缩写变量
-- `$` KISSY.Node.all的缩写变量
+## html mock的使用
 
 
 
-## 加载html片段
 必须先配置html片段所放的目录路径，`JF.path = 'spec/fixtures'`
 
 假设在你的`spec/fixtures`目录有个html片段文件`jasmine-kissy_fixture.html`。

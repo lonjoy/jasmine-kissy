@@ -10,6 +10,58 @@ jasmine-kissy主要扩展了如下三个功能
 - 2.增加kissy的html mock功能，同步加载html片段并插入到测试运行页中
 - 3.增加用于KISSY的machers，只作用于KISSY的Node模块。
 
+##如何测试kissy的异步加载模块
+
+有2种方法：
+- 干掉异步加载过程，静态引用模块文件
+-  异步加载完模块文件后，再执行jasmine运行测试用例
+
+这里明河推荐使用第二种方法，虽然会麻烦些。
+
+####引入runner.js
+
+```html
+  <script type="text/javascript" src="http://a.tbcdn.cn/s/kissy/gallery/jasmine-kissy/1.0/runner.js"></script>
+```
+
+####加载指定测试模块文件
+
+```javascript
+    KISSY.use('jasmine/runner',function(S,runner){
+        runner('specs/ajax-mock-spec');
+    })
+```
+
+如果你需要加载多个测试模块:
+
+```javascript
+    KISSY.use('jasmine/runner',function(S,runner){
+        runner(['specs/ajax-mock-spec','specs/html-mock-spec']);
+    })
+```
+
+ **留意：**  specs模块包，需要自己配置下，比如：
+
+```javascript
+    KISSY.use('jasmine/runner',function(S,runner){
+        runner(['specs/ajax-mock-spec','specs/html-mock-spec'],{ name:'specs', path:'./', charset:"gbk" });
+    })
+```
+
+####测试模块如何写？
+
+```javascript
+KISSY.add(function (S, Node, io, demo) {
+    describe('runner test', function () {
+        it('runner test', function () {
+
+        });
+
+    });
+}, {requires:['node','page/mods/demo' ]});
+```
+describe包裹在add()内，然后requires源码模块js。
+
 ##ajax mock
 
 jasmine-kissy中的ajax mock远比[jasmine ajax](https://github.com/pivotal/jasmine-ajax)来的强大。
@@ -31,7 +83,7 @@ demo传送门：[mock api test](http://demo.36ria.com/jasmine-kissy/ajax_mock_sp
 
 ```html
   <script type="text/javascript" src="http://a.tbcdn.cn/s/kissy/1.2.0/??seed-min.js,dom-min.js,event-min.js,node-min.js"></script>
-  <script type="text/javascript" src="src/jasmine-kissy.js"></script>
+  <script type="text/javascript" src="http://a.tbcdn.cn/s/kissy/gallery/jasmine-kissy/1.0/jasmine-kissy.js"></script>
 ```
 
 留意必须开启KISSY的debug标识：

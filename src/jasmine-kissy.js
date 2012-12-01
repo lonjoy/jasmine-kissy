@@ -78,7 +78,7 @@ KISSY.add("ajax/base", function (S, JSON, Event, XhrObject) {
             }
 
             if (c.processData && c.data && !S.isString(c.data)) {
-                // å¿…é¡» encodeURIComponent ç¼–ç  utf-8
+                // ±ØĞë encodeURIComponent ±àÂë utf-8
                 c.data = S.param(c.data, undefined, undefined, c.serializeArray);
             }
 
@@ -94,7 +94,7 @@ KISSY.add("ajax/base", function (S, JSON, Event, XhrObject) {
                 }
             }
 
-            // æ•°æ®ç±»å‹å¤„ç†é“¾ï¼Œä¸€æ­¥æ­¥å°†å‰é¢çš„æ•°æ®ç±»å‹è½¬åŒ–æˆæœ€åä¸€ä¸ª
+            // Êı¾İÀàĞÍ´¦ÀíÁ´£¬Ò»²½²½½«Ç°ÃæµÄÊı¾İÀàĞÍ×ª»¯³É×îºóÒ»¸ö
             c.dataType = S.trim(c.dataType || "*").split(rspace);
 
             c.context = c.context || c;
@@ -161,7 +161,7 @@ KISSY.add("ajax/base", function (S, JSON, Event, XhrObject) {
                 }, c.timeout * 1000);
             }
 
-            //add by æ˜æ²³
+            //add by Ã÷ºÓ
             var useMock = io.useMock;
 
             if (useMock) {
@@ -202,7 +202,7 @@ KISSY.add("ajax/base", function (S, JSON, Event, XhrObject) {
             }
         });
         /**
-         *  mockæ–¹æ³•
+         *  mock·½·¨
          * @param c
          * @param xhr
          */
@@ -219,50 +219,50 @@ KISSY.add("ajax/base", function (S, JSON, Event, XhrObject) {
             if (isJsonp) {
                 io._setJsonpCallback(xhr, mockData);
             }
-            //è§¦å‘ajaxå¯¹è±¡çš„å›è°ƒ
+            //´¥·¢ajax¶ÔÏóµÄ»Øµ÷
             xhr.callback(mockData.status);
 
             io.resetCurrentResponse();
         }
 
         /**
-         * mock æ–¹æ³•
-         * @author æ˜æ²³
+         * mock ·½·¨
+         * @author Ã÷ºÓ
          */
         S.mix(io, {
             /**
-             * å½“å‰ä½¿ç”¨çš„ä¼ªæ•°æ®
+             * µ±Ç°Ê¹ÓÃµÄÎ±Êı¾İ
              * @type Object | Array
              * @default []
              */
             currentResponse:[],
             /**
-             * æ˜¯å¦mock ajaxæ•°æ®
+             * ÊÇ·ñmock ajaxÊı¾İ
              * @type Boolean
              * @default false
              */
             useMock:false,
             /**
-             * é‡ç½®currentResponse
+             * ÖØÖÃcurrentResponse
              * @return Array
              */
             resetCurrentResponse:function () {
                 return io.currentResponse = [];
             },
             /**
-             * æ·»åŠ mockçš„ä¼ªæ•°æ®
-             * @param {String} url éœ€è¦mockçš„æ¥å£
-             * @param {Object} response æ•°æ®ç±»ä¼¼{status:200,responseText:''}
+             * Ìí¼ÓmockµÄÎ±Êı¾İ
+             * @param {String} url ĞèÒªmockµÄ½Ó¿Ú
+             * @param {Object} response Êı¾İÀàËÆ{status:200,responseText:''}
              */
             install:function (url, response) {
                 if (!S.isString(url)) {
-                    S.log('responseçš„urlä¸å­˜åœ¨ï¼');
+                    S.log('responseµÄurl²»´æÔÚ£¡');
                     return false;
                 }
                 if (S.isArray(response)) {
                     var responses = io.responses;
                     S.each(response, function (res, i) {
-                        //mockæ¥å£è¿”å›çš„æ•°æ®å¤´ä¿¡æ¯
+                        //mock½Ó¿Ú·µ»ØµÄÊı¾İÍ·ĞÅÏ¢
                         response[i].contentType = res.responseHeaders || defaultConfig.accepts.json;
                     });
                     responses[url] = response;
@@ -270,7 +270,7 @@ KISSY.add("ajax/base", function (S, JSON, Event, XhrObject) {
                 return responses[url];
             },
             /**
-             * ä½¿ç”¨æŒ‡å®šçŠ¶æ€ç çš„æ•°æ®
+             * Ê¹ÓÃÖ¸¶¨×´Ì¬ÂëµÄÊı¾İ
              * @param  {String} url
              * @param {Number|String} status
              */
@@ -283,7 +283,7 @@ KISSY.add("ajax/base", function (S, JSON, Event, XhrObject) {
                 return io.currentResponse = io._getResponse(response, status);
             },
             /**
-             * ä»å¤§çš„ä¼ªæ•°æ®ï¼ˆåŒ…å«æˆåŠŸå¤±è´¥ï¼‰è·å–æŒ‡å®šçŠ¶æ€ç çš„ä¼ªæ•°æ®
+             * ´Ó´óµÄÎ±Êı¾İ£¨°üº¬³É¹¦Ê§°Ü£©»ñÈ¡Ö¸¶¨×´Ì¬ÂëµÄÎ±Êı¾İ
              * @param {Object}  response
              * @param {Number} status
              * @return {Array}
@@ -304,10 +304,10 @@ KISSY.add("ajax/base", function (S, JSON, Event, XhrObject) {
                 return res;
             },
             /**
-             *  é€šè¿‡å¼‚æ­¥å‚æ•°æ¥è¿‡æ»¤æƒ³è¦çš„å‡æ•°æ®
+             *  Í¨¹ıÒì²½²ÎÊıÀ´¹ıÂËÏëÒªµÄ¼ÙÊı¾İ
              * @param {Array} response
              * @param {String} data
-             * @param {Boolean} isJsonp æ˜¯å¦æ˜¯jsonp
+             * @param {Boolean} isJsonp ÊÇ·ñÊÇjsonp
              * @private
              */
             _getResponseUseData:function (response, data, isJsonp) {
@@ -350,8 +350,8 @@ KISSY.add("ajax/base", function (S, JSON, Event, XhrObject) {
                 return res;
             },
             /**
-             * æ˜¯å¦æ˜¯jsonpçš„ç»“æœé›†
-             * @param {Object} response ç»“æœé›†Â·
+             * ÊÇ·ñÊÇjsonpµÄ½á¹û¼¯
+             * @param {Object} response ½á¹û¼¯¡¤
              * @return {Boolean}
              * @private
              */
@@ -360,7 +360,7 @@ KISSY.add("ajax/base", function (S, JSON, Event, XhrObject) {
                 return /\(/.test(responseText);
             },
             /**
-             * è·å–jsonpå›è°ƒå‡½æ•°å
+             * »ñÈ¡jsonp»Øµ÷º¯ÊıÃû
              * @param {Object} response
              * @private
              * @return {String}
@@ -370,16 +370,16 @@ KISSY.add("ajax/base", function (S, JSON, Event, XhrObject) {
                 return responseText.split('(')[0];
             },
             /**
-             * mock jsonpçš„å›è°ƒ
-             * @param {Object} xhr xhrå¯¹è±¡
-             * @param {Object} response ç»“æœé›†
+             * mock jsonpµÄ»Øµ÷
+             * @param {Object} xhr xhr¶ÔÏó
+             * @param {Object} response ½á¹û¼¯
              * @private
              */
             _setJsonpCallback:function (xhr, response) {
                 var callbackName = io._getJsonpCallbackName(response);
-                //è®¾ç½®å›è°ƒå‡½æ•°
+                //ÉèÖÃ»Øµ÷º¯Êı
                 window[callbackName] = function (r) {
-                    // jsonp è¿”å›äº†æ•°ç»„
+                    // jsonp ·µ»ØÁËÊı×é
                     if (arguments.length > 1) {
                         r = S.makeArray(arguments);
                     }
@@ -390,7 +390,7 @@ KISSY.add("ajax/base", function (S, JSON, Event, XhrObject) {
                 xhr.jsonpCallback = callbackName;
             },
             /**
-             * ç»“æœé›†é›†åˆ
+             * ½á¹û¼¯¼¯ºÏ
              * @type Object
              * @default {}
              */
@@ -402,12 +402,12 @@ KISSY.add("ajax/base", function (S, JSON, Event, XhrObject) {
         requires:["json", "event", "ajax/xhrobject"]
     });
 
-KISSY.add('jasmine/htmlMock',function(S,Node){
+KISSY.add('jasmine/htmlMock',function(S,Node,io,Velocity){
     var $ = Node.all;
 
     /**
      * @name JamineFixture
-     * @class ç”¨äºjasmineæµ‹è¯•å‰å‘é¡µé¢æ’å…¥æµ‹è¯•ç”¨çš„htmlç‰‡æ®µï¼ˆåº”ç”¨äºjsTestDriverï¼‰
+     * @class ÓÃÓÚjasmine²âÊÔÇ°ÏòÒ³Ãæ²åÈë²âÊÔÓÃµÄhtmlÆ¬¶Î£¨Ó¦ÓÃÓÚjsTestDriver£©
      * @constructor
      */
     function JamineFixture(config) {
@@ -417,47 +417,33 @@ KISSY.add('jasmine/htmlMock',function(S,Node){
 
     JamineFixture.defaultConfig = {
         /**
-         * å®¹å™¨é’©å­
+         * ÈİÆ÷¹³×Ó
          */
         wrapperHook:'#J_JF',
         /**
-         * htmlç‰‡æ®µæ’å…¥domçš„å®¹å™¨id
+         * htmlÆ¬¶Î²åÈëdomµÄÈİÆ÷id
          */
         wrapperTpl:'<div id ="J_JF">{fixture}</div>',
         /**
-         * æ•°æ®ç¼“å­˜
+         * Êı¾İ»º´æ
          */
-        cache:{},
-        /**
-         * htmlç‰‡æ®µå­˜æ”¾çš„ç›®å½•è·¯å¾„
-         */
-        path:'./'
+        cache:{}
     };
     S.augment(JamineFixture, {
         /**
-         * ajaxè¯»å–htmlæ–‡ä»¶ï¼Œå¹¶æ’å…¥åˆ°æµ‹è¯•å®¹å™¨ï¼ˆå¯ä»¥æ˜¯å¤šä¸ªurlï¼‰
+         * ajax¶ÁÈ¡htmlÎÄ¼ş£¬²¢²åÈëµ½²âÊÔÈİÆ÷
+         * @param {String} url htmlÆ¬¶Î£¨Ä£°æ£©Â·¾¶
+         * @param {Object} mockData Î±Êı¾İ
          * @return {NodeList}
          */
-        load:function () {
+        load:function (url,mockData) {
             var self = this, html;
             if (!arguments) return false;
-            html = self.read.apply(self, arguments);
+            html = self._getHtml(url,mockData);
             return self._appendTo(html);
         },
         /**
-         * åªè¯»å–htmlæ–‡ä»¶ï¼Œè¿”å›htmlç‰‡æ®µæ•°æ®
-         * @return {String}
-         */
-        read:function () {
-            var self = this, urls = arguments, aHtml = [];
-            if (!urls.length) return false;
-            S.each(urls, function (url) {
-                aHtml.push(self._getHtml(url));
-            });
-            return aHtml.join('');
-        },
-        /**
-         * æ¸…é™¤æµ‹è¯•å®¹å™¨å†…çš„èŠ‚ç‚¹
+         * Çå³ı²âÊÔÈİÆ÷ÄÚµÄ½Úµã
          * @return {NodeList}
          */
         clean:function () {
@@ -465,35 +451,66 @@ KISSY.add('jasmine/htmlMock',function(S,Node){
             return $(wrapperHook).html('');
         },
         /**
-         * ajaxè¯»å–å•ä¸ªhtmlæ–‡ä»¶
-         * @param {String} url htmlæ–‡ä»¶çš„url
+         * ajax¶ÁÈ¡µ¥¸öhtmlÎÄ¼ş
+         * @param {String} url htmlÎÄ¼şµÄurl
+         * @param {String} mockData Î±Êı¾İ£¨Ö»ÓĞÊÇvmÄ£¿éÊ±²ÅĞèÒª£©
          * @return {String}
          */
-        _getHtml:function (url) {
-            var self = this, cache = self.cache,
-                path = self.path, htmlUrl;
-            //ä¸å­˜åœ¨è¯¥htmlç‰‡æ®µçš„ç¼“å­˜ï¼Œajaxè¯·æ±‚
+        _getHtml:function (url,mockData) {
+            var self = this, cache = self.cache;
+            //²»´æÔÚ¸ÃhtmlÆ¬¶ÎµÄ»º´æ£¬ajaxÇëÇó
             if (S.isUndefined(cache[url])) {
-                htmlUrl = path.match('/$') && path + url || path + '/' + url;
-                S.io({
-                    //asyncå¿…é¡»è®¾ç½®ä¸ºfalseï¼ŒåŒæ­¥åŠ è½½æ–‡ä»¶ï¼Œå¦åˆ™jasmineçš„æµ‹è¯•æœ‰å¯èƒ½æ˜¯åœ¨è·å–æ–‡ä»¶ä¹‹å‰æ‰§è¡Œå¯¼è‡´æµ‹è¯•å¤±è´¥
-                    async:false,
-                    cache:false,
-                    dataType:'html',
-                    url:htmlUrl,
-                    success:function (data) {
-                        self.cache[url] = data;
-                    },
-                    error:function (xhr, status, errorThrown) {
-                        throw Error('Fixture could not be loaded: ' + url + ' (status: ' + status + ', message: ' + errorThrown.message + ')');
-                    }
-                })
+                var html = self._send(url);
+
+                //ÊÇ·ñÊÇvmÄ£°æ
+                var isVm = self.isVm(url);
+                if(isVm){
+                    html = self._parse(html,mockData);
+                }
+
+                self.cache[url] = html;
+
             }
             return self.cache[url];
         },
         /**
-         * å‘é¡µé¢æ·»åŠ htmlç‰‡æ®µdom
-         * @param {string} html htmlç‰‡æ®µ
+         *  ·¢ËÍÇëÇó
+         * @param url
+         */
+        _send:function(url,dataType){
+            var self = this;
+            var useMock = io.useMock;
+            //ÏÈ¹Ø±Õajax mock
+            if(useMock){
+                io.useMock = false;
+            }
+            var result = '';
+            io({
+                //async±ØĞëÉèÖÃÎªfalse£¬Í¬²½¼ÓÔØÎÄ¼ş£¬·ñÔòjasmineµÄ²âÊÔÓĞ¿ÉÄÜÊÇÔÚ»ñÈ¡ÎÄ¼şÖ®Ç°Ö´ĞĞµ¼ÖÂ²âÊÔÊ§°Ü
+                async:false,
+                cache:false,
+                dataType: dataType || 'html',
+                //contentType:"application/x-www-form-urlencoded; charset=gbk",
+                //mimeType:"",
+                url:url,
+                success:function (data) {
+                    result = data;
+                },
+                error:function (xhr, status, errorThrown) {
+                    throw Error('Fixture could not be loaded: ' + url + ' (status: ' + status + ', message: ' + errorThrown.message + ')');
+                }
+            });
+
+            //ÖØĞÂ¿ªÆôajax mock
+            if(useMock){
+                io.useMock = true;
+            }
+
+            return result;
+        },
+        /**
+         * ÏòÒ³ÃæÌí¼ÓhtmlÆ¬¶Îdom
+         * @param {string} html htmlÆ¬¶Î
          */
         _appendTo:function (html) {
             if (!S.isString(html)) return false;
@@ -509,46 +526,128 @@ KISSY.add('jasmine/htmlMock',function(S,Node){
             return $(wrapperHook);
         },
         /**
-         * æ¸…ç†ç¼“å­˜
+         * ÇåÀí»º´æ
          */
         cleanCache:function () {
             this.cache = {};
             return this;
+        },
+        /**
+         * Î±Êı¾İÎªvmÄ£°æ
+         * @param {String} url Â·¾¶
+         * @return {Boolean}
+         */
+        isVm:function(url){
+            return /\.vm$/.test(url);
+        },
+        /**
+         *  ½âÎöÄ£°æ
+         * @param {String} tpl Ä£°æ
+         * @param {Object} data Î±Êı¾İ
+         * @return {String}
+         * @private
+         */
+        _parse:function(tpl,data){
+            var self = this;
+            if(!S.isString(tpl)) return '';
+
+            //ÎªÎ±Êı¾İÂ·¾¶£¬ÔÙ·¢¸öÇëÇó»ñÈ¡Ö®
+            if(S.isString(data)){
+                data = self._send(data,'json');
+            }
+
+            tpl = self._require(tpl,data);
+            //TODO:ÕâÊÇvelocity×é¼şµÄbug£¬·ÀÖ¹¼ÓÔØ²»´æÔÚµÄÎÄ¼ş
+            var Parser;
+            S.use('gallery/velocity/1.0/parse',function(S,P){
+                Parser = P;
+            });
+            var asts = Parser.parse(tpl);
+            var compile = new Velocity(asts);
+            return compile.render(data);
+        },
+        /**
+         * ¼ÓÔØÄ£°æÄÚµÄ×ÓÄ£°æ
+         * @param {String} tpl Ä£°æ
+         * @param {Object} mockData Î±Êı¾İ
+         * @return {String}
+         * @private
+         */
+        _require:function(tpl,mockData){
+            var self = this;
+            var reg = /#parse\(\"(.*)\"\)/g;
+            var parseMods = tpl.match(reg);
+            //Â·¾¶Ó³Éä
+            var map = mockData['MAP'];
+            if(!parseMods || !parseMods.length || !map) return tpl;
+
+            S.each(parseMods,function(parseMod){
+                var reg = /#parse\(\"(.*)\"\)/;
+                parseMod.match(reg);
+                var mod = RegExp.$1;
+                html = _loadMod(mod);
+
+                tpl = tpl.replace(reg,html);
+            });
+
+            return tpl;
+
+            /**
+             * ¶ÁÈ¡Ä£°æÄÚµÄ×ÓÄ£°æ
+             * @param mod
+             * @return {String}
+             * @private
+             */
+            function _loadMod(mod){
+                var html = '';
+                S.each(map,function(path,namespace){
+                    var reg = new RegExp(namespace);
+                    if(reg.test(mod)){
+                        //±ÈÈç½«"control×ª»»³ÉmapÖ¸¶¨µÄÂ·¾¶"
+                        mod = mod.replace(reg,path);
+                        html = self._send(mod);
+                        return false;
+                    }
+                });
+                return html;
+            }
         }
     });
-    KISSY.JamineFixture = JamineFixture;
 
     return JamineFixture;
-},{requires:['node']});
+},{requires:['node','ajax','gallery/velocity/1.0/index']});
+
 beforeEach(function () {
-    //æ·»åŠ æ–°çš„matcher
+    var S = KISSY;
+    var $ = S.Node.all;
+    //Ìí¼ÓĞÂµÄmatcher
     this.addMatchers({
         toExist:function () {
-            return this.actual.length > 0;
+            return $(this.actual).length > 0;
         },
         toHasClass:function (className) {
-            return this.actual.hasClass(className);
+            return $(this.actual).hasClass(className);
         },
         toHasAttr:function (attr) {
-            return this.actual.hasAttr(attr);
+            return $(this.actual).hasAttr(attr);
         },
         toHasProp:function (prop) {
-            return this.actual.hasProp(prop);
+            return $(this.actual).hasProp(prop);
         },
         toHasData:function (dataName) {
-            return this.actual.data(dataName) != '';
+            return $(this.actual).data(dataName) != '';
         },
         toContain:function (selector) {
-            return this.actual.children(selector).length > 0;
+            return $(this.actual).children(selector).length > 0;
         },
         toEqualValue:function (value) {
-            return this.actual.val() === value;
+            return $(this.actual).val() === value;
         },
         toEqualText:function (text) {
-            return KISSY.trim(this.actual.text()) === text;
+            return KISSY.trim($(this.actual).text()) === text;
         },
         toShow:function () {
-            return this.actual.css('display') === 'block';
+            return $(this.actual).css('display') === 'block';
         }
     });
 });

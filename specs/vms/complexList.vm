@@ -1,3 +1,4 @@
+#if($!type==1)
 <div class="scroller">
     <div class="ks-switchable-content">
         #foreach($msg in $!currentProofMsg)
@@ -12,3 +13,4 @@
         #end
     </div>
 </div>
+#end

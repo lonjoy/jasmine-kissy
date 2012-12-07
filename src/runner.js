@@ -2,7 +2,7 @@
  * @fileoverview 运行测试用例
  * @author 剑平（明河）<minghe36@gmail.com>
  **/
-KISSY.add('jasmine/runner',function (S) {
+KISSY.add('jasmine/runner', function (S) {
 
     S.Config.debug = '@DEBUG@';
     S.config({
@@ -18,7 +18,7 @@ KISSY.add('jasmine/runner',function (S) {
     /**
      * 执行jasmine，输出结果测试结果集
      */
-    function execute(){
+    function execute() {
         var env = jasmine.getEnv();
         env.addReporter(new jasmine.HtmlReporter);
         env.execute();
@@ -26,13 +26,13 @@ KISSY.add('jasmine/runner',function (S) {
 
     /**
      *  运行测试模块
-     * @param {String | Array} mods 模块
+     * @param {String} mods 模块
      * @param {Object} package 包配置
      */
-    function runner(mods,package){
-        var specsPackage =  package;
-        if(!S.isObject(specsPackage)){
-            specsPackage =  {
+    function runner(mods, package) {
+        var specsPackage = package;
+        if (!S.isObject(specsPackage)) {
+            specsPackage = {
                 name:'specs',
                 path:'./',
                 charset:"gbk"
@@ -41,17 +41,12 @@ KISSY.add('jasmine/runner',function (S) {
 
         S.config({ packages:[ specsPackage ] });
 
-        if(S.isString(mods)){
-            S.use(mods,function(){
-                execute();
-            })
-        }
-        else if(S.isArray(mods)){
-            S.use(mods.join((',')),function(){
-                execute();
-            })
-        }
+
+        S.use(mods,function(){
+            execute();
+        })
     }
+
 
     return runner;
 });

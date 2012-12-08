@@ -312,10 +312,47 @@ MAP是特殊关键字，后面明河会解释。
 },{requires:['node','jasmine/htmlMock']});
 ```
 
+`load()`方法有二个参数：
+
+- vm模版路径，必填
+- 伪数据路径，可以直接传入json数据，比如下面的代码
+
+
+```javascript
+htmlMock.load('./specs/vms/list.vm',{
+    "MAP":{
+            "control":"./specs/vms"
+        },
+        "type":1,
+        "currentProofMsg":[
+            {"attachment":"http://img01.taobaocdn.com/imgextra/i1/10361016579368429/T1zbCTXfdmXXXXXXXX_!!413810361-0-tstar","roleName":"您","content":"这是一条留言"},
+            {"attachment":"http://img01.taobaocdn.com/imgextra/i1/10361016579368429/T1zbCTXfdmXXXXXXXX_!!413810361-0-tstar","roleName":"您","content":"这是一条留言"}
+        ]
+});
+```
+
+####MAP的用途
+
+MAP用于指定vm模版中依赖模版的路径，比如你的vm可能会出现`#parse("control/listImageComment.vm")`这样的引用，这时候就需要指定下`control`的路径映射。
+
+####clean:清理模版
+
+测试运行结束后建议clean下模版，避免影响其他测试的准确度。
+
+`htmlMock.clean('./specs/vms/list.vm')` ，不填入第一个参数时，会清理所有的html片段，不推荐！！！
+
+加载的html片段会放在页面的测试容器内，容器id为`#J_JF`。
+
+加载的片段会放入缓存，避免重复加载。
+
 
 ## html mock的使用
 
-假设在你的`spec/fixtures`目录有个html片段文件`jasmine-kissy_fixture.html`。
+[点此查看demo](http://demo.36ria.com/jasmine-kissy/html_mock_spec_runner.html)
+
+html mock与velocity mock基本一样，更为简单，不需要第二个伪数据参数。
+
+假设在你的`specs/fixtures`目录有个html片段文件`jasmine-kissy_fixture.html`。
 
 文件的内容如下：
     <div id="test" class="test-wrapper">
@@ -324,30 +361,18 @@ MAP是特殊关键字，后面明河会解释。
 
 使用如下语法加载这个文件：
 
-    `JF.load('jasmine-kissy_fixture.html');`
+    `htmlMock.load('./specs/jasmine-kissy_fixture.html');`
 
 你可以测试下#test这个div是否存在：
 
-    `expect($('#test')).toExist();`
+    `expect('#test').toExist();`
 
 (ps:toExist()是jasmine-kissy新增的macher，用于测试节点是否存在)
 
-加载的片段会放入缓存，避免重复加载。
-
-需要加载多个文件，语法如下：
-
-    `JF.load('jasmine-kissy_fixture.html'，'jasmine-kissy-2_fixture.html');`
-
-加载的html片段会放在页面的测试容器内，容器id为`#J_JF`。
-
-清理html片段，（jasmine-kissy会自动清理），使用`JF.clean()`。
-
-清理缓存，使用`JF.cleanCache()`。
 
 ## KISSY matchers
 
-留意这些matcher只适用于KISSY的Node方式。
-
+[点此查看demo](http://demo.36ria.com/jasmine-kissy/matchers_spec_runner.html)
 
 - `toExist()` 测试节点的存在性
 - `toHasClass()` 测试节点是否拥有指定的class名
@@ -369,6 +394,4 @@ MAP是特殊关键字，后面明河会解释。
 
 - Jasmine 1.1
 - KISSY 1.2
-
-jasmine-kissy应用的场景更多是在JsTestDriver使用jasmine来进行单元测试时候。
 

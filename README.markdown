@@ -4,11 +4,12 @@
 
 jasmine-kissy是为了方便基于kissy的代码进行单元测试，而向[Jasmine](http://pivotal.github.com/jasmine/)添加的扩展。
 
-jasmine-kissy主要扩展了如下三个功能
+jasmine-kissy主要扩展了如下四个功能
 
 - 1.增加kissy的ajax mock功能（伪造ajax的假数据方便进行ajax测试）
-- 2.增加kissy的html mock功能，同步加载html片段并插入到测试运行页中
-- 3.增加用于KISSY的machers，只作用于KISSY的Node模块。
+- 2.增加velocity mock功能，直接读取vm模版，使用伪数据mock出测试所依赖的html片段（dom）
+- 3.增加html mock功能，同步加载html片段并插入到测试运行页中
+- 4.增加用于KISSY的machers，只作用于KISSY的Node模块。
 
 ##如何测试kissy的异步加载模块
 
@@ -232,11 +233,87 @@ mock jsonp的接口情况也是如此
 
  所有的mock都非常简单，你无需修改源码js，mock类会自动处理，你唯一要做的就是install伪数据，然后use你想要的结果集
 
+##velocity mock的使用
+
+大多数业务逻辑的js测试都依赖于dom结构（采用mvc框架会好很多），velocity mock的功能是直接拉取工程中的vm文件，然后渲染出html片段，插入到body中。
+
+[点击进入velocity mock的demo](http://demo.36ria.com/jasmine-kissy/velocity_mock_spec_runner.html)
+
+####我们准备一个vm模版
+
+list.vm内容如下:
+
+ ```html
+<div class="scroller">
+    <div class="ks-switchable-content">
+        #foreach($msg in $!currentProofMsg)
+        <div class="list-item J_ListItem">
+            #if($!msg.attachment)
+            #set($newUrl ="$!msg.attachment"+"_120x120.jpg")
+            #set($originalUrl="$!msg.attachment"+".jpg")
+            <img class="J_ImgDD" data-original-url="$refundImageServer.getURI("refund/$originalUrl")" src="$refundImageServer.getURI("refund/$newUrl")"/>
+            #end
+            <div class="image-comment">
+                <img class="comment-icon" src="http://img02.taobaocdn.com/tps/i2/T1yhMcXbBdXXb38KzX-15-13.png"/>
+                <div class=" J_ImageCommentContent">
+                    <p class="comment-author">$!roleName的留言：</p>
+                    <p>$!msg.content</p>
+                </div>
+            </div>
+        </div>
+        #end
+    </div>
+</div>
+ ```
+
+伪数据list.json内容如下：
+
+ ```javascript
+{
+    "MAP":{
+        "control":"./specs/vms"
+    },
+    "type":1,
+    "currentProofMsg":[
+        {"attachment":"http://img01.taobaocdn.com/imgextra/i1/10361016579368429/T1zbCTXfdmXXXXXXXX_!!413810361-0-tstar","roleName":"您","content":"这是一条留言"},
+        {"attachment":"http://img01.taobaocdn.com/imgextra/i1/10361016579368429/T1zbCTXfdmXXXXXXXX_!!413810361-0-tstar","roleName":"您","content":"这是一条留言"}
+    ]
+}
+  ```
+
+MAP是特殊关键字，后面明河会解释。
+
+####在spec文件中引入HtmlMock
+
+```javascript
+ KISSY.add(function (S, Node,HtmlMock) {
+     var $ = Node.all;
+     var htmlMock = new HtmlMock();
+     describe('velocity mock test', function () {
+
+     })
+},{requires:['node','jasmine/htmlMock']});
+```
+####读取vm模版和伪数据
+
+```javascript
+ KISSY.add(function (S, Node,HtmlMock) {
+     var $ = Node.all;
+     var htmlMock = new HtmlMock();
+     describe('velocity mock test', function () {
+        it('正确读取并解析vm模版',function(){
+            htmlMock.load('./specs/vms/list.vm','./specs/vms/list.json');
+
+            expect($('.scroller')).toExist();
+            expect($('.J_ListItem').length).toBe(2);
+            expect($('.J_ImgDD').length).toBe(2);
+        })
+     })
+},{requires:['node','jasmine/htmlMock']});
+```
+
+
 ## html mock的使用
-
-
-
-必须先配置html片段所放的目录路径，`JF.path = 'spec/fixtures'`
 
 假设在你的`spec/fixtures`目录有个html片段文件`jasmine-kissy_fixture.html`。
 

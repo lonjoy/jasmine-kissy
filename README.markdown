@@ -2,7 +2,7 @@
 
 版本：`1.0`
 
-jasmine-kissy是为了方便基于kissy的代码进行单元测试，而向[Jasmine](http://pivotal.github.com/jasmine/)添加的扩展。
+jasmine-kissy是为了方便基于kissy的代码进行单元测试，而向[Jasmine](https://jasmine.github.io/)添加的扩展。
 
 jasmine-kissy主要扩展了如下四个功能
 
@@ -65,7 +65,7 @@ describe包裹在add()内，然后requires源码模块js。
 
 ##ajax mock
 
-jasmine-kissy中的ajax mock远比[jasmine ajax](https://github.com/pivotal/jasmine-ajax)来的强大。
+jasmine-kissy中的ajax mock远比[jasmine ajax](https://github.com/jasmine/jasmine-ajax)来的强大。
 
 - 你无需修改任何源码js
 - 能够直接截获接口，当脚本向接口发送请求时，直接劫持到伪结果集
